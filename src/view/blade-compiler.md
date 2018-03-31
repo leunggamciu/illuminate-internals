@@ -1,5 +1,28 @@
 # Blade模板编译器
 
+## 注释
+
+Blade支持注释，语法为`{{-- comment!!! --}}`，对应的实现也很简单，就是用正则表达式匹配，然后替换为空字符串
+
+
+```php
+//src/View/Compilers/Concerns/CompilesComments.php
+
+/**
+ * Compile Blade comments into an empty string.
+ *
+ * @param  string  $value
+ * @return string
+ */
+protected function compileComments($value)
+{
+    $pattern = sprintf('/%s--(.*?)--%s/s', $this->contentTags[0], $this->contentTags[1]);
+
+    return preg_replace($pattern, '', $value);
+}
+```
+
+
 ## 模板继承
 
 Blade支持模板继承，在父模板中使用`@yield`指令来创建一个占位符，子模板通过`@extends`指令来继承父模板，然后就能在子模板中
