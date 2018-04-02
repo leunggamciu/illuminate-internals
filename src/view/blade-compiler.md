@@ -81,9 +81,10 @@ public function compileString($value)
 `compileString`先找到所有位于`@verbatim`,`@endverbatim`以及`@php`，`@endphp`之间的内容，然后把它们先存起来，
 再用一个非PHP字符替换掉原来的PHP内容，等其他指令编译完成以后，再将之前的非PHP字符用之前存起来的内容替换掉。
 
-这里多此一举的原因是，如果不用普通字符替换掉这些raw php代码的话，那么`token_get_all`函数解析出来的结果就会非常多，
-因为会解析那些raw php代码，所以，为了性能考虑，只能减少`token_get_all`的结果，所以把raw php代码替换成一个字符串，
-那么`token_get_all`作用在这些字符串时，只会产生一个**T_INLINE_HTML**token。
+这里多此一举的原因是，一方面，`@verbatim`块里可以包含Blade的指令字符，如果不把这些字符先替换掉，那么在后续的解析过程
+中，这些指令就会被解析，这样就违反了`@verbatim`的语义了。另一方面，如果不用普通字符替换掉这些raw php代码的话，
+那么`token_get_all`函数解析出来的结果就会非常多，因为会解析那些raw php代码，所以，为了性能考虑，只能减少`token_get_all`的结果，
+所以把raw php代码替换成一个字符串，那么`token_get_all`作用在这些字符串时，只会产生一个**T_INLINE_HTML**token。
 
 首先来看保存的逻辑
 
