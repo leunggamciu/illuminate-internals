@@ -213,66 +213,46 @@ echo "hello world";
 
 `@php`还支持传入PHP表达式，`@php ($a = 1)`，这时候就不需要`@endphp`了，它会被编译成`<?php $a = 1; ?>`。
 
-首先看看`@php`结合`@endphp`的实现，它涉及的方法比较多。
+`@php`块的实现在前面已经解释过了，这里主要是解释`@php`表达式
 
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/View/Compilers/Concerns/CompilesRawPhp.php
 
 /**
- * Store the PHP blocks and replace them with a temporary placeholder.
+ * Compile the raw PHP statements into valid PHP.
  *
- * @param  string  $value
+ * @param  string  $expression
  * @return string
  */
-protected function storePhpBlocks($value)
+protected function compilePhp($expression)
 {
-    return preg_replace_callback('/(?<!@)@php(.*?)@endphp/s', function ($matches) {
-        return $this->storeRawBlock("<?php{$matches[1]}?>");
-    }, $value);
-}
+    if ($expression) {
+        return "<?php {$expression}; ?>";
+    }
 
-/**
- * Store a raw block and return a unique raw placeholder.
- *
- * @param  string  $value
- * @return string
- */
-protected function storeRawBlock($value)
-{
-    return $this->getRawPlaceholder(
-        array_push($this->rawBlocks, $value) - 1
-    );
-}
-
-/**
- * Replace the raw placeholders with the original code stored in the raw blocks.
- *
- * @param  string  $result
- * @return string
- */
-protected function restoreRawContent($result)
-{
-    $result = preg_replace_callback('/'.$this->getRawPlaceholder('(\d+)').'/', function ($matches) {
-        return $this->rawBlocks[$matches[1]];
-    }, $result);
-
-    $this->rawBlocks = [];
-
-    return $result;
-}
-
-/**
- * Get a placeholder to temporary mark the position of raw blocks.
- *
- * @param  int|string  $replace
- * @return string
- */
-protected function getRawPlaceholder($replace)
-{
-    return str_replace('#', $replace, '@__raw_block_#__@');
+    return '@php';
 }
 ```
+
+十分简单，只是用`<?php ?>`标签包围起来。在同一个trait里面，还有一个方法:
+
+```php
+//src/View/Compilers/Concerns/CompilesRawPhp.php
+
+/**
+ * Compile the unset statements into valid PHP.
+ *
+ * @param  string  $expression
+ * @return string
+ */
+protected function compileUnset($expression)
+{
+    return "<?php unset{$expression}; ?>";
+}
+```
+
+也是很简单，只调用了`unset`函数。所以在模板下可以用`@unset`指令来实现unset。
 
 ## include
 
@@ -793,3 +773,49 @@ public function appendSection()
 和`stopSection`很像，主要逻辑的意思就是当渲染一个父页面时，看看子页面有没有定义对应的section，如果有，那么就把子页面section
 的内容和父页面section的内容拼接起来，如果没有，那么就把父页面的section内容放到`$this->sections`数组中，这个数组的含义在之前
 已经分析过了。
+
+## stack
+
+在Blade中，我们可以使用`@stack`指令定义可以占位符，然后用`@push`和`@prepend`指令往占位符里添加内容。更具体的用法请参考文档。
+
+`@stack`指令经过编译后，变成了
+
+```php
+<?php echo $__env->yieldPushContent($expression); ?>
+```
+
+下面是`yieldPushContent`的实现
+
+```php
+//src/View/Concerns/ManagesStacks.php
+
+
+/**
+ * Get the string contents of a push section.
+ *
+ * @param  string  $section
+ * @param  string  $default
+ * @return string
+ */
+public function yieldPushContent($section, $default = '')
+{
+    if (! isset($this->pushes[$section]) && ! isset($this->prepends[$section])) {
+        return $default;
+    }
+
+    $output = '';
+
+    if (isset($this->prepends[$section])) {
+        $output .= implode(array_reverse($this->prepends[$section]));
+    }
+
+    if (isset($this->pushes[$section])) {
+        $output .= implode($this->pushes[$section]);
+    }
+
+    return $output;
+}
+```
+
+这里主要有两个数组，一个是`$this->prepends`，另外一个就是`$this->pushes`，`yieldPushContent`主要就是
+把这两个数组的内容合并到一起，然后将合并后的结果返回。
