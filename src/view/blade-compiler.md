@@ -819,3 +819,75 @@ public function yieldPushContent($section, $default = '')
 
 这里主要有两个数组，一个是`$this->prepends`，另外一个就是`$this->pushes`，`yieldPushContent`主要就是
 把这两个数组的内容合并到一起，然后将合并后的结果返回。
+
+`@push`与`@endpush`指令最终是编译成下面的PHP代码:
+
+```php
+<?php $__env->startPush('foo'); ?>
+<?php $__env->stopPush(); ?>
+```
+
+对应的实现如下：
+
+```php
+//src/View/Concerns/ManagesStacks.php
+
+/**
+ * Start injecting content into a push section.
+ *
+ * @param  string  $section
+ * @param  string  $content
+ * @return void
+ */
+public function startPush($section, $content = '')
+{
+    if ($content === '') {
+        if (ob_start()) {
+            $this->pushStack[] = $section;
+        }
+    } else {
+        $this->extendPush($section, $content);
+    }
+}
+
+/**
+ * Stop injecting content into a push section.
+ *
+ * @return string
+ * @throws \InvalidArgumentException
+ */
+public function stopPush()
+{
+    if (empty($this->pushStack)) {
+        throw new InvalidArgumentException('Cannot end a push stack without first starting one.');
+    }
+
+    return tap(array_pop($this->pushStack), function ($last) {
+        $this->extendPush($last, ob_get_clean());
+    });
+}
+
+/**
+ * Append content to a given push section.
+ *
+ * @param  string  $section
+ * @param  string  $content
+ * @return void
+ */
+protected function extendPush($section, $content)
+{
+    if (! isset($this->pushes[$section])) {
+        $this->pushes[$section] = [];
+    }
+
+    if (! isset($this->pushes[$section][$this->renderCount])) {
+        $this->pushes[$section][$this->renderCount] = $content;
+    } else {
+        $this->pushes[$section][$this->renderCount] .= $content;
+    }
+}
+```
+
+`startPush`的主要作用是开启输出缓冲，然后把stack的名称存起来。`endPush`则负责把输出缓冲区的内容
+拿出来，关闭缓冲区，并且连同之前存起来的stack名称一起，传递给`extendPush`方法。而`extendPush`
+就负责将所有push到stack里面的内容放到`$this->pushes`数组里。
