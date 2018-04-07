@@ -178,6 +178,94 @@ protected function restoreRawContent($result)
 
 它的作用就是从`$this->rawBlocks`数组中拿到之前的存进去的raw php，然后根据`@__raw_block_下标__@`标识，替换到合适的位置。
 
+
+## 输出
+
+Blade支持三种输出指令：`{{ $val }}`，`{!! $val !!}`以及`@{{ $val }}`，前两者的区别是，前者会经过`htmlspecialchars`函数
+的转换，而后者不会，第三个指令最终输出的结果只是把`@`符号拿掉，变成`{{ $val }}`。
+
+编译输出指令的逻辑位于`src/Illuminate/View/Compilers/Concerns/CompilesEchos.php`，核心逻辑主要是以下4个方法：
+
+```php
+//src/Illuminate/View/Compilers/Concerns/CompilesEchos.php
+
+/**
+ * Compile the "raw" echo statements.
+ *
+ * @param  string  $value
+ * @return string
+ */
+protected function compileRawEchos($value)
+{
+    $pattern = sprintf('/(@)?%s\s*(.+?)\s*%s(\r?\n)?/s', $this->rawTags[0], $this->rawTags[1]);
+
+    $callback = function ($matches) {
+        $whitespace = empty($matches[3]) ? '' : $matches[3].$matches[3];
+
+        return $matches[1] ? substr($matches[0], 1) : "<?php echo {$this->compileEchoDefaults($matches[2])}; ?>{$whitespace}";
+    };
+
+    return preg_replace_callback($pattern, $callback, $value);
+}
+
+/**
+ * Compile the "regular" echo statements.
+ *
+ * @param  string  $value
+ * @return string
+ */
+protected function compileRegularEchos($value)
+{
+    $pattern = sprintf('/(@)?%s\s*(.+?)\s*%s(\r?\n)?/s', $this->contentTags[0], $this->contentTags[1]);
+
+    $callback = function ($matches) {
+        $whitespace = empty($matches[3]) ? '' : $matches[3].$matches[3];
+
+        $wrapped = sprintf($this->echoFormat, $this->compileEchoDefaults($matches[2]));
+
+        return $matches[1] ? substr($matches[0], 1) : "<?php echo {$wrapped}; ?>{$whitespace}";
+    };
+
+    return preg_replace_callback($pattern, $callback, $value);
+}
+
+/**
+ * Compile the escaped echo statements.
+ *
+ * @param  string  $value
+ * @return string
+ */
+protected function compileEscapedEchos($value)
+{
+    $pattern = sprintf('/(@)?%s\s*(.+?)\s*%s(\r?\n)?/s', $this->escapedTags[0], $this->escapedTags[1]);
+
+    $callback = function ($matches) {
+        $whitespace = empty($matches[3]) ? '' : $matches[3].$matches[3];
+
+        return $matches[1] ? $matches[0] : "<?php echo e({$this->compileEchoDefaults($matches[2])}); ?>{$whitespace}";
+    };
+
+    return preg_replace_callback($pattern, $callback, $value);
+}
+
+/**
+ * Compile the default values for the echo statement.
+ *
+ * @param  string  $value
+ * @return string
+ */
+public function compileEchoDefaults($value)
+{
+    return preg_replace('/^(?=\$)(.+?)(?:\s+or\s+)(.+?)$/si', 'isset($1) ? $1 : $2', $value);
+}
+```
+
+
+`compileRawEchos`用于编译`{{ $val }}`，把匹配到的花括号里面的内容传递给`compileEchoDefaults`方法，如果`{{ $val }}`前面带有`@`符号，
+那么就直接返回`{{ $val }}`，这样也就实现了`@{{ $val }}`的语义了。`compileEchoDefaults`的实现也很简单，通过观察这个方法，还可以发现一种
+文档中并没有提及的写法：`{{ $val or '$val not set' }}`，就是当`$val`不存在时候输出别的字符。
+
+
 ## 注释
 
 Blade支持注释，语法为`{{-- comment!!! --}}`，对应的实现也很简单，就是用正则表达式匹配，然后替换为空字符串
@@ -890,4 +978,74 @@ protected function extendPush($section, $content)
 
 `startPush`的主要作用是开启输出缓冲，然后把stack的名称存起来。`endPush`则负责把输出缓冲区的内容
 拿出来，关闭缓冲区，并且连同之前存起来的stack名称一起，传递给`extendPush`方法。而`extendPush`
-就负责将所有push到stack里面的内容放到`$this->pushes`数组里。
+就负责将所有push到stack里面的内容放到`$this->pushes`数组里。这里要注意一下的是`$this->renderCount`，
+它是一个计数器，Blade每开始渲染一个模板，这个计数器就加一，模板渲染结束，计数器就减一，可以用它来跟踪
+当前渲染到的模板在整个模板树中的层级。而这个计数器应用到这里表明了同一个层级要`@push`的内容会连接在一起。
+
+`@prepend`的实现和`@push`的实现十分相似。它被编译成
+
+```php
+<?php $__env->startPrepend('foo'); ?>
+<?php $__env->stopPrepend(); ?>
+```
+
+```php
+//src/View/Concerns/ManagesStacks.php
+
+/**
+ * Start prepending content into a push section.
+ *
+ * @param  string  $section
+ * @param  string  $content
+ * @return void
+ */
+public function startPrepend($section, $content = '')
+{
+    if ($content === '') {
+        if (ob_start()) {
+            $this->pushStack[] = $section;
+        }
+    } else {
+        $this->extendPrepend($section, $content);
+    }
+}
+
+/**
+ * Stop prepending content into a push section.
+ *
+ * @return string
+ * @throws \InvalidArgumentException
+ */
+public function stopPrepend()
+{
+    if (empty($this->pushStack)) {
+        throw new InvalidArgumentException('Cannot end a prepend operation without first starting one.');
+    }
+
+    return tap(array_pop($this->pushStack), function ($last) {
+        $this->extendPrepend($last, ob_get_clean());
+    });
+}
+
+/**
+ * Prepend content to a given stack.
+ *
+ * @param  string  $section
+ * @param  string  $content
+ * @return void
+ */
+protected function extendPrepend($section, $content)
+{
+    if (! isset($this->prepends[$section])) {
+        $this->prepends[$section] = [];
+    }
+
+    if (! isset($this->prepends[$section][$this->renderCount])) {
+        $this->prepends[$section][$this->renderCount] = $content;
+    } else {
+        $this->prepends[$section][$this->renderCount] = $content.$this->prepends[$section][$this->renderCount];
+    }
+}
+```
+
+与`extendPush`不同的是，`extendPrepend`把`$content`连接到前面。
