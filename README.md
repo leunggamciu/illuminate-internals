@@ -14,6 +14,7 @@
         - [注释](src/view/blade/comment.md)
         - [输出](src/view/blade/echo.md)
         - [PHP](src/view/blade/php.md)
+        - [条件语句](src/view/blade/conditional.md)
         - [Include](src/view/blade/include.md)
         - [继承](src/view/blade/inherit.md)
         - [Stack](src/view/blade/stack.md)
