@@ -17,3 +17,4 @@
         - [Include](src/view/blade/include.md)
         - [继承](src/view/blade/inherit.md)
         - [Stack](src/view/blade/stack.md)
+        - [组件](src/view/blade/component.md)
