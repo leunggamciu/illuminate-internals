@@ -16,6 +16,7 @@
         - [PHP](src/view/blade/php.md)
         - [条件语句](src/view/blade/conditional.md)
         - [isset](src/view/blade/isset.md)
+        - [hassection](src/view/blade/hassection.md)
         - [权限](src/view/blade/permission.md)
         - [认证](src/view/blade/authentication.md)
         - [Include](src/view/blade/include.md)
@@ -24,3 +25,4 @@
         - [组件](src/view/blade/component.md)
         - [json](src/view/blade/json.md)
         - [助手函数](src/view/blade/helpers.md)
+        - [翻译](src/view/blade/translation.md)
