@@ -15,6 +15,8 @@
         - [输出](src/view/blade/echo.md)
         - [PHP](src/view/blade/php.md)
         - [条件语句](src/view/blade/conditional.md)
+        - [循环语句](src/view/blade/loop.md)
+        - [empty](src/view/blade/empty.md)
         - [isset](src/view/blade/isset.md)
         - [hassection](src/view/blade/hassection.md)
         - [权限](src/view/blade/permission.md)
