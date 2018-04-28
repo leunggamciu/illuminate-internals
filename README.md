@@ -15,6 +15,8 @@
         - [文件引擎](src/view/engine/file.md)
         - [PHP引擎](src/view/engine/php.md)
         - [编译器引擎](src/view/engine/compiler.md)
+    - [视图](src/view/view.md)
+    - [视图工厂](src/view/factory.md)
     - [Blade模板编译器](src/view/blade/intro.md)
         - [注释](src/view/blade/comment.md)
         - [输出](src/view/blade/echo.md)
