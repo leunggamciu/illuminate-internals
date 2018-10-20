@@ -7,7 +7,7 @@
 - [路由](src/routing/intro.md)
     - [中间件](src/routing/middleware/intro.md)
 - [持久层](src/persistence/intro.md)
-- [渲染层](src/view/intro.md)
+- [视图层](src/view/intro.md)
     - [架构](src/view/arch.md)
     - [view文件查找器](src/view/view-finder.md)
     - [引擎解析器](src/view/engine-resolver.md)
