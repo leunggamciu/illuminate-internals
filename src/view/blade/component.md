@@ -32,7 +32,7 @@ $__env->renderComponent();
 这两个方法对应的实现如下：
 
 ```php
-//src/view/Concerns/ManagesComponents.php
+//src/Illuminate/View/Concerns/ManagesComponents.php
 
 /**
  * Start a component rendering process.
@@ -104,7 +104,7 @@ $__env->endSlot();
 对应的实现如下：
 
 ```php
-//src/view/Concerns/ManagesComponents.php
+//src/Illuminate/View/Concerns/ManagesComponents.php
 
 /**
  * Start the slot rendering process.

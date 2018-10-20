@@ -10,7 +10,7 @@ Blade支持`@json`指令，将PHP数组转换为JSON字符串，用法如下:
 
 
 ```php
-//src/View/Compilers/Concerns/CompilersJson.php
+//src/Illuminate/View/Compilers/Concerns/CompilersJson.php
 
 /**
  * Compile the JSON statement into valid PHP.

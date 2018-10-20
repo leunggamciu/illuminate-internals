@@ -3,7 +3,7 @@
 `@include`指令的实现很容易理解，它相当于渲染一遍include进来的模板，然后把渲染后的内容填充到模板中。
 
 ```php
-//src/View/Compilers/Concerns/CompilesIncludes.php
+//src/Illuminate/View/Compilers/Concerns/CompilesIncludes.php
 
 /**
  * Compile the include statements into valid PHP.
@@ -23,7 +23,7 @@ protected function compileInclude($expression)
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesIncludes.php
+//src/Illuminate/View/Compilers/Concerns/CompilesIncludes.php
 
 /**
  * Compile the include-if statements into valid PHP.
@@ -70,7 +70,7 @@ protected function compileIncludeFirst($expression)
 `@includeIf`是在`@include`的基础上，先判断模板文件是否存在，存在的情况下才渲染。
 
 ```php
-//src/View/Factory.php
+//src/Illuminate/View/Factory.php
 
 /**
  * Determine if a given view exists.
@@ -94,7 +94,7 @@ public function exists($view)
 
 
 ```php
-//src/View/Factory.php
+//src/Illuminate/View/Factory.php
 
 /**
  * Get the rendered content of the view based on a given condition.
@@ -118,7 +118,7 @@ public function renderWhen($condition, $view, $data = [], $mergeData = [])
 `@includeFirst`是在`@include`的基础上，渲染最先找到的那个模板文件。
 
 ```php
-//src/View/Factory.php
+//src/Illuminate/View/Factory.php
 
 /**
  * Get the first view that actually exists from the given list.
@@ -149,7 +149,7 @@ Blade还支持一个结合了循环以及include的指令：`@each`，具体用�
 它的实现如下：
 
 ```php
-//src/View/Factory.php
+//src/Illuminate/View/Factory.php
 
 /**
  * Get the rendered contents of a partial from a loop.

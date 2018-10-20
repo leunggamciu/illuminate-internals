@@ -18,7 +18,7 @@ auth.failed
 它们会被编译成
 
 ```php
-//src/View/Compilers/Concerns/CompilesTranslations.php
+//src/Illuminate/View/Compilers/Concerns/CompilesTranslations.php
 
 /**
  * Compile the lang statements into valid PHP.
@@ -52,7 +52,7 @@ protected function compileEndlang()
 把缓冲区的内容，也就是处于`@lang`和`@endlang`之间的内容，传递给translator的`getFromJson`方法。
 
 ```php
-//src/View/Concerns/ManagesTranslations.php
+//src/Illuminate/View/Concerns/ManagesTranslations.php
 
 /**
  * Start a translation block.

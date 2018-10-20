@@ -11,7 +11,7 @@ Blade支持多种循环语句，首先是普通的`@foreach`语句：
 对应的实现是
 
 ```php
-//src/View/Compilers/Concerns/CompilesLoops.php
+//src/Illuminate/View/Compilers/Concerns/CompilesLoops.php
 
 /**
  * Compile the for-each statements into valid PHP.
@@ -71,7 +71,7 @@ $loop = $__env->getLastLoop();
 
 
 ```php
-//src/View/Concerns/ManageLoops.php
+//src/Illuminate/View/Concerns/ManageLoops.php
 
 /**
  * Add new loop to the stack.
@@ -103,7 +103,7 @@ public function addLoop($data)
 
 
 ```php
-//src/View/Concerns/ManageLoops.php
+//src/Illuminate/View/Concerns/ManageLoops.php
 
 /**
  * Increment the top loop's indices.
@@ -162,7 +162,7 @@ endif;
 以下是`@forelse`的实现
 
 ```php
-//src/View/Concerns/ManageLoops.php
+//src/Illuminate/View/Concerns/ManageLoops.php
 
 /**
  * Counter to keep track of nested forelse statements.
@@ -226,7 +226,7 @@ Blade还支持`@break`和`@continue`指令
 
 
 ```php
-//src/View/Concerns/ManageLoops.php
+//src/Illuminate/View/Concerns/ManageLoops.php
 
 /**
  * Compile the break statements into valid PHP.

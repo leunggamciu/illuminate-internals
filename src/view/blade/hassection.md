@@ -17,7 +17,7 @@
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesConditionals.php
+//src/Illuminate/View/Compilers/Concerns/CompilesConditionals.php
 
 /**
  * Compile the has-section statements into valid PHP.

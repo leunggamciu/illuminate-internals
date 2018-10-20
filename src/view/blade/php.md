@@ -15,7 +15,7 @@ echo "hello world";
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesRawPhp.php
+//src/Illuminate/View/Compilers/Concerns/CompilesRawPhp.php
 
 /**
  * Compile the raw PHP statements into valid PHP.
@@ -36,7 +36,7 @@ protected function compilePhp($expression)
 十分简单，只是用`<?php ?>`标签包围起来。在同一个trait里面，还有一个方法:
 
 ```php
-//src/View/Compilers/Concerns/CompilesRawPhp.php
+//src/Illuminate/View/Compilers/Concerns/CompilesRawPhp.php
 
 /**
  * Compile the unset statements into valid PHP.

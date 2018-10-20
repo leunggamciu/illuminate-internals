@@ -17,7 +17,7 @@ Blade支持在模板文件中判断用户是否登录，具体使用的指令为
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesConditionals.php
+//src/Illuminate/View/Compilers/Concerns/CompilesConditionals.php
 
 /**
  * Compile the if-auth statements into valid PHP.

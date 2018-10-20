@@ -5,7 +5,7 @@ Blade支持一些助手函数指令：`@csrf`，`@dd($foo)`，`@dump($bar)`，`@
 它们对应的用法可以参考文档，而对应的实现也很简单，都是在对应的助手函数基础上封装而成的。
 
 ```php
-//src/View/Compilers/Concerns/CompilesHelpers.php
+//src/Illuminate/View/Compilers/Concerns/CompilesHelpers.php
 
 /**
  * Compile the CSRF statements into valid PHP.

@@ -37,7 +37,7 @@ echo $__env->make('base', array_except(get_defined_vars(), array('__data', '__pa
 先来看看`startSection`的实现:
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 /**
  * Start injecting content into a section.
@@ -63,7 +63,7 @@ public function startSection($section, $content = null)
 接下来是`stopSection`的实现:
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 
 /**
@@ -96,7 +96,7 @@ public function stopSection($overwrite = false)
 
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 /**
  * Append content to a given section.
@@ -142,7 +142,7 @@ echo $__env->yieldContent('title');
 
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 /**
  * Get the string contents of a section.
@@ -189,7 +189,7 @@ Sidebar
 Blade把`@show`编译成`<?php echo $_env->yieldSection(); ?>`。`yieldSection`的实现也很简单：
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 /**
  * Stop injecting content into a section and return its contents.
@@ -294,7 +294,7 @@ Title from page2Title from page
 以下是`appendSection`的实现:
 
 ```php
-//src/View/Concerns/ManagesLayouts.php
+//src/Illuminate/View/Concerns/ManagesLayouts.php
 
 /**
  * Stop injecting content into a section and append it.

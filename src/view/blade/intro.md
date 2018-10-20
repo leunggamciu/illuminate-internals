@@ -8,7 +8,7 @@ Blade的`compile`实现很简短:
 
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/Illuminate/View/Compilers/BladeCompiler.php
 
 /**
  * Compile the view at the given path.
@@ -34,7 +34,7 @@ public function compile($path = null)
 
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/Illuminate/View/Compilers/BladeCompiler.php
 
 /**
  * Compile the given Blade template contents.
@@ -87,7 +87,7 @@ public function compileString($value)
 首先来看保存的逻辑
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/Illuminate/View/Compilers/BladeCompiler.php
 
 /**
  * Store the verbatim blocks and replace them with a temporary placeholder.
@@ -120,7 +120,7 @@ protected function storePhpBlocks($value)
 
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/Illuminate/View/Compilers/BladeCompiler.php
 
 /**
  * Store a raw block and return a unique raw placeholder.
@@ -154,7 +154,7 @@ protected function getRawPlaceholder($replace)
 
 
 ```php
-//src/View/Compilers/BladeCompiler.php
+//src/Illuminate/View/Compilers/BladeCompiler.php
 
 /**
  * Replace the raw placeholders with the original code stored in the raw blocks.

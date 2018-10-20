@@ -12,7 +12,7 @@
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesConditionals.php
+//src/Illuminate/View/Compilers/Concerns/CompilesConditionals.php
 
 /**
  * Compile the if-isset statements into valid PHP.

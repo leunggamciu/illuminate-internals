@@ -21,7 +21,7 @@ endif;
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesLoops.php
+//src/Illuminate/View/Compilers/Concerns/CompilesLoops.php
 
 /**
  * Compile the for-else-empty and empty statements into valid PHP.

@@ -15,7 +15,7 @@ Blade支持在模板文件中判断用户是否具有某些权限，所用到的
 具体的实现如下：
 
 ```php
-//src/View/Compilers/Concerns/CompilesAuthorizations.php
+//src/Illuminate/View/Compilers/Concerns/CompilesAuthorizations.php
 
 /**
  * Compile the can statements into valid PHP.

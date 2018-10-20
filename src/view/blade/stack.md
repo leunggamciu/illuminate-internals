@@ -11,7 +11,7 @@
 下面是`yieldPushContent`的实现
 
 ```php
-//src/View/Concerns/ManagesStacks.php
+//src/Illuminate/View/Concerns/ManagesStacks.php
 
 
 /**
@@ -54,7 +54,7 @@ public function yieldPushContent($section, $default = '')
 对应的实现如下：
 
 ```php
-//src/View/Concerns/ManagesStacks.php
+//src/Illuminate/View/Concerns/ManagesStacks.php
 
 /**
  * Start injecting content into a push section.
@@ -126,7 +126,7 @@ protected function extendPush($section, $content)
 ```
 
 ```php
-//src/View/Concerns/ManagesStacks.php
+//src/Illuminate/View/Concerns/ManagesStacks.php
 
 /**
  * Start prepending content into a push section.

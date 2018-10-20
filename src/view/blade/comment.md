@@ -4,7 +4,7 @@ Blade支持注释，语法为`{{-- comment!!! --}}`，对应的实现也很简�
 
 
 ```php
-//src/View/Compilers/Concerns/CompilesComments.php
+//src/Illuminate/View/Compilers/Concerns/CompilesComments.php
 
 /**
  * Compile Blade comments into an empty string.
