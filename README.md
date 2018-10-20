@@ -1,7 +1,10 @@
 # illuminate-inside
 
 
-- [IoC容器](src/ioc/intro.md)
+- [服务容器](src/service-container/intro.md)
+    - [服务绑定](src/service-container/bind.md)
+    - [服务解析](src/service-container/resolve.md)
+    - [依赖解决](src/service-container/dependency.md)
 - [服务提供者](src/service_provider/intro.md)
 - [Facade](src/facade/intro.md)
 - [路由](src/routing/intro.md)
