@@ -10,6 +10,7 @@
     - [Facade调用](src/facade/facade-call.md)
     - [Facade别名](src/facade/facade-alias.md)
     - [实时Facade](src/facade/realtime-facade.md)
+- [管道](src/pipeline/pipeline.md)
 - [路由](src/routing/intro.md)
     - [中间件](src/routing/middleware/intro.md)
 - [持久层](src/persistence/intro.md)
