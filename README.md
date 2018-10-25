@@ -19,6 +19,8 @@
         - [连接工厂](src/database/connection/factory.md)
         - [SQL操作](src/database/connection/sql.md)
         - [读写分离](src/database/connection/read-write.md)
+        - [连接丢失处理](src/database/connection/connection-lost.md)
+        - [事务管理](src/database/connection/transaction.md)
     - [查询构造器]()
     - [模型]()
 - [视图层](src/view/intro.md)
