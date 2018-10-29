@@ -71,3 +71,5 @@ public function toSql()
 
 大概的流程就是先使用`toSql`方法将内部的数据结构转换成SQL语句，完成以后调用`runSelect`向数据库发送SQL语句，返回的结果集经过`$this->processor`
 中的`processSelect`方法处理，最终返回结果。
+
+除了`get`方法以外，还有其他像`update`，`insert`，`delete`等方法都会向数据库发送SQL语句并返回结果。
