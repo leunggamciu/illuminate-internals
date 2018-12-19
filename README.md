@@ -38,6 +38,7 @@
         - [insert](src/database/query-builder/insert.md)
         - [delete](src/database/query-builder/delete.md)
         - [truncate](src/database/query-builder/truncate.md)
+        - [分页](src/database/query-builder/paginate.md)
     - [模型]()
 - [视图层](src/view/intro.md)
     - [架构](src/view/arch.md)
