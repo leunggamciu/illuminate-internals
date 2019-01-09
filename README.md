@@ -13,6 +13,8 @@
     - [Facade别名](src/facade/facade-alias.md)
     - [实时Facade](src/facade/realtime-facade.md)
 - [管道](src/pipeline/pipeline.md)
+- [总线](src/bus/intro.md)
+    - [指令分发器](src/bus/dispatcher.md)
 - [路由](src/routing/intro.md)
     - [中间件](src/routing/middleware/intro.md)
 - [数据库](src/database/intro.md)
