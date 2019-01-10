@@ -122,9 +122,9 @@ public function dispatchNow($command, $handler = null)
 
 在这里要说明一下的是，同步指令有自执行(self handling)和使用独立处理器来执行两种，自执行的指令就是指令本身带有
 `handle`方法的指令，而使用独立处理器来执行的话，那么就需要通过分发器的`map`方法来建立指令和对应指令处理器之间
-的关系。独立指令处理器就是一个拥有`handle`方法，并接受对应指令类作为参数。
+的关系。独立指令处理器就是一个拥有`handle`方法，并接受对应指令类作为参数的类。
 
-在分发同步指令时，还应用了管道这个组件，这样就能像为同步指令添加中间件支持。分发器的`pipeThrough`就是用来指定
+在分发同步指令时，还应用了管道这个组件，这样就能为同步指令添加中间件支持。分发器的`pipeThrough`就是用来指定
 中间件的
 
 ```php
@@ -210,3 +210,59 @@ protected function pushCommandToQueue($queue, $command)
 
 它主要的作用就是根据指令中的属性，来决定要把指令推入到哪个队列以及是否延迟执行。也就是说，除了能在`queue`方法中指定以外，还可以指定
 `$queue`，`$delay`这两个公共属性来达到同样的目的，当然，`queue`方法要优先。
+
+前面还忽略了指令中的`$connection`属性，它用来指定哪个队列连接，而且只能通过该公共属性来指定。
+
+如果我们不希望在定义指令的时候就指定队列连接，队列名称，是否延迟执行这些属性，而希望在分发指令的时候再指定，那么我们可以为
+指令引入`\Illuminate\Bus\Queueable`特征，它为指令添加了几个方法，我们主要关注`onConnection`, `onQueue`和`delay`
+这三个
+
+
+```php
+//src/Illuminate/Bus/Dispatcher.php
+
+/**
+ * Set the desired connection for the job.
+ *
+ * @param  string|null  $connection
+ * @return $this
+ */
+public function onConnection($connection)
+{
+    $this->connection = $connection;
+
+    return $this;
+}
+
+/**
+ * Set the desired queue for the job.
+ *
+ * @param  string|null  $queue
+ * @return $this
+ */
+public function onQueue($queue)
+{
+    $this->queue = $queue;
+
+    return $this;
+}
+
+/**
+ * Set the desired delay for the job.
+ *
+ * @param  \DateTimeInterface|\DateInterval|int|null  $delay
+ * @return $this
+ */
+public function delay($delay)
+{
+    $this->delay = $delay;
+
+    return $this;
+}
+```
+
+相应地，它也为指令添加了`$connection`，`$queue`和`$delay`三个公共属性。这样，我们在分发异步指令时，就可以这样
+
+```php
+$bus->dispatch((new SendEmailCommand)->onConnection('database')->onQueue('email')->delay(60));
+```
