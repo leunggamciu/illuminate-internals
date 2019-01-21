@@ -6,7 +6,7 @@ macro是一种为类/实例动态添加方法的技术。在Laravel的核心中�
 `onlyTrashed`。
 
 它的实现很简单，主要就是使用了`__call`和`__callStatic`这两个魔术方法。它本身是一个特征，所以当一个类实现了自己的`__call`
-或者`__callStatic`时，当引入这个特征时，就要考虑冲突的问题。
+或者`__callStatic`时，当引入这个特征时，就要考虑覆盖的问题。
 
 ```php
 //src/Illuminate/Support/Traits/Macroable.php
