@@ -15,6 +15,7 @@
 - [管道](src/pipeline/pipeline.md)
 - [总线](src/bus/intro.md)
     - [指令分发器](src/bus/dispatcher.md)
+    - [自分发](src/bus/self-dispatch.md)
 - [任务队列](src/queue/intro.md)
     - [连接器](src/queue/connector.md)
     - [队列](src/queue/queue.md)
