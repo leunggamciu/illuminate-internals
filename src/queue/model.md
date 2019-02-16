@@ -4,6 +4,12 @@
 `Illuminate\Contracts\Database\ModelIdentifier`实例，然后在worker端再把这个实例转换为对应的
 eloquent模型或者模型集。
 
+这样做主要的原因是eloquent模型中的一些属性有可能包含`Closure`类型的数据，譬如`$with`这个属性，它是用来指定
+预载入关系的，和通过`with`方法指定预载入不同的是，凡是通过该模型构建的查询都会预载入`$with`中指定的关系。
+拥有这种类型属性的实例是没有办法被`serialize`函数序列化的，也就是说，eloquent模型是不能被`serialize`的。
+因此，在任务实例被`serialize`之前，将所有eloquent属性转换为一个能被`serialize`的实例，在`unserialize`的
+时候再把它转换回来。
+
 实现这一特性最主要的就是`Illuminate\Queue\SerializesModels`和`Illuminate\Queue\SerializesAndRestoreModelIdentifiers`
 这两个特征。在artisan生成的任务类中已经导入了SerializesModels特征。
 
